@@ -11,7 +11,6 @@ class OrderController {
             const newOrder = await Order.create({ UserId: req.user.id, total })
             // order aja jangan lupa insert order detail 
             if (newOrder) {
-                SendMail.send(req.user.email, process.env.PassEmail)
                 // Create Snap API instance
                 let snap = new midtransClient.Snap({
                     // Set to true if you want Production Environment (accept real transaction).
@@ -37,6 +36,7 @@ class OrderController {
 
                 let trx = await snap.createTransaction(parameter)
                     trx.orderId = newOrder.id
+                    SendMail.send(req.user.email)
                 res.status(200).json(trx)
             }
         } catch (err) {
@@ -46,16 +46,24 @@ class OrderController {
 
     static async patchStatusOrder(req, res, next) {
         try {
-            const id = +req.body.OrderId
-            const updateStatus = await Order.update({ isPaid: "paid" }, {
-                where: { id }
+            // console.log(req.body)
+            const {order_id} = req.body
+            const checkOrder = await Order.findOne({
+                where:{id:order_id}
             })
-            if (updateStatus) {
-                res.status(201).json(updateStatus)
-            } else {
-                throw {
-                    name: "DATANOTFOUND"
+            if (checkOrder) {
+                const updateStatus = await Order.update({ isPaid: "paid" }, {
+                    where: { id }
+                })
+                if (updateStatus) {
+                    res.status(201).json(updateStatus)
+                } else {
+                    throw {
+                        name: "DATANOTFOUND"
+                    }
                 }
+            } else {
+                res.status(400).json({msg:'order ID invalid'})
             }
         } catch (err) {
             next(err)

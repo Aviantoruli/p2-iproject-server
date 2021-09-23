@@ -1,8 +1,7 @@
 const nodemailer = require("nodemailer")
 
 class SendMail {
-    static send(email, pass) {
-        console.log(email, pass)
+    static send(email) {
         let mailTransporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
