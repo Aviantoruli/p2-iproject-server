@@ -12,28 +12,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsToMany(models.Cart)
+      User.hasMany(models.Order)
     }
   };
   User.init({
     firstName: {
       type: DataTypes.STRING,
       validate:{
-        notNull:{msg:'first name cannot be null'},
         notEmpty:{msg:'first name cannot be empty'}
       }
     },
     lastName: {
       type: DataTypes.STRING,
       validate:{
-        notNull:{msg:'last name cannot be null'},
         notEmpty:{msg:'last name cannot be empty'}
       }
     },
     email: {
       type: DataTypes.STRING,
       validate:{
-        notNull:{msg:'email cannot be null'},
         notEmpty:{msg:'email cannot be empty'},
         isEmail:{msg:'wrong format'}
       }
@@ -41,25 +38,24 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       validate:{
-        notNull:{msg:'password cannot be null'},
         notEmpty:{msg:'password cannot be empty'}
       }
     },
     phoneNumber: {
       type: DataTypes.STRING,
       validate:{
-        notNull:{msg:'phone number cannot be null'},
         notEmpty:{msg:'phone number cannot be empty'}
       }
     },
     address: DataTypes.STRING,
-    postCode: DataTypes.INTEGER,
     province: DataTypes.STRING,
     city: DataTypes.STRING,
-    country: DataTypes.STRING,
     imgUrl: DataTypes.STRING
   }, {
     hooks:{
+      beforeCreate(instance){
+        instance.imgUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+      },
       afterValidate(instance){
         instance.password = hashPass(instance.password)
       }

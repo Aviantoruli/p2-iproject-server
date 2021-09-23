@@ -9,34 +9,33 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       firstName: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       lastName: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       email: {
+        allowNull: false,
         type: Sequelize.STRING,
         unique:true
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       phoneNumber: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       address: {
         type: Sequelize.STRING
       },
-      postCode: {
-        type: Sequelize.INTEGER
-      },
       province: {
         type: Sequelize.STRING
       },
       city: {
-        type: Sequelize.STRING
-      },
-      country: {
         type: Sequelize.STRING
       },
       imgUrl: {
